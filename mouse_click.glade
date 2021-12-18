@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 
+
+Copyright (C) Wings-Fantasy
+
+This file is part of MouseClick.
+
+MouseClick is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+MouseClick is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with MouseClick.  If not, see <http://www.gnu.org/licenses/>.
+
+Author: Wings-Fantasy
+
+-->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <!-- interface-license-type lgplv3 -->
+  <!-- interface-name MouseClick -->
+  <!-- interface-description \351\274\240\346\240\207\350\277\236\347\202\271\345\231\250 -->
+  <!-- interface-copyright Wings-Fantasy -->
+  <!-- interface-authors Wings-Fantasy -->
+  <object class="GtkListStore" id="clickTypeList">
+    <columns>
+      <!-- column-name clickTypeValue -->
+      <column type="gchararray"/>
+      <!-- column-name clickType -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">1</col>
+        <col id="1" translatable="yes">鼠标左键</col>
+      </row>
+      <row>
+        <col id="0">2</col>
+        <col id="1" translatable="yes">鼠标中键</col>
+      </row>
+      <row>
+        <col id="0">3</col>
+        <col id="1" translatable="yes">鼠标右键</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="hotKeyList">
+    <columns>
+      <!-- column-name hotKeyValue -->
+      <column type="gchararray"/>
+      <!-- column-name hotKey -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">1</col>
+        <col id="1" translatable="yes">F1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2</col>
+        <col id="1" translatable="yes">F2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3</col>
+        <col id="1" translatable="yes">F3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4</col>
+        <col id="1" translatable="yes">F4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">5</col>
+        <col id="1" translatable="yes">F5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">6</col>
+        <col id="1" translatable="yes">F6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">7</col>
+        <col id="1" translatable="yes">F7</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">8</col>
+        <col id="1" translatable="yes">F8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">9</col>
+        <col id="1" translatable="yes">F9</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10</col>
+        <col id="1" translatable="yes">F10</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">11</col>
+        <col id="1" translatable="yes">F11</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">12</col>
+        <col id="1" translatable="yes">F12</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkAdjustment" id="intervalTimeAdjustment">
+    <property name="lower">0.10</property>
+    <property name="upper">100</property>
+    <property name="value">10</property>
+    <property name="step-increment">0.10</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">鼠标连点器</property>
+    <property name="resizable">False</property>
+    <property name="default-width">312</property>
+    <property name="default-height">300</property>
+    <property name="icon">icon.png</property>
+    <child>
+      <object class="GtkLayout">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">鼠标按键：</property>
+          </object>
+          <packing>
+            <property name="x">16</property>
+            <property name="y">29</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="clickType">
+            <property name="width-request">197</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="model">clickTypeList</property>
+            <property name="active">0</property>
+            <property name="id-column">0</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="x">96</property>
+            <property name="y">22</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">间隔模式：</property>
+          </object>
+          <packing>
+            <property name="x">16</property>
+            <property name="y">74</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioButton" id="fixedInterval">
+            <property name="label" translatable="yes">固定间隔</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="active">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">randomInterval</property>
+          </object>
+          <packing>
+            <property name="x">96</property>
+            <property name="y">72</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioButton" id="randomInterval">
+            <property name="label" translatable="yes">随机间隔</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="active">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">fixedInterval</property>
+          </object>
+          <packing>
+            <property name="x">203</property>
+            <property name="y">72</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="intervalTimeTip">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">间隔时间：</property>
+          </object>
+          <packing>
+            <property name="x">16</property>
+            <property name="y">119</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="intervalTime">
+            <property name="width-request">168</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="input-purpose">number</property>
+            <property name="adjustment">intervalTimeAdjustment</property>
+            <property name="digits">1</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="x">96</property>
+            <property name="y">115</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">秒</property>
+          </object>
+          <packing>
+            <property name="x">272</property>
+            <property name="y">119</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">快  捷  键 ：</property>
+          </object>
+          <packing>
+            <property name="x">16</property>
+            <property name="y">170</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="hotKey">
+            <property name="width-request">197</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">False</property>
+            <property name="model">hotKeyList</property>
+            <property name="active">6</property>
+            <property name="id-column">0</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="x">96</property>
+            <property name="y">168</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="start">
+            <property name="label" translatable="yes">开始</property>
+            <property name="width-request">90</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">36</property>
+            <property name="y">230</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="stop">
+            <property name="label" translatable="yes">停止</property>
+            <property name="width-request">90</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">184</property>
+            <property name="y">230</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
