@@ -5,6 +5,7 @@
 #include <log4cpp/Category.hh>
 #include "main.h"
 #include "thread/ClickThread.h"
+#include "thread/HotKeyThread.h"
 
 GtkBuilder *builder;
 
@@ -17,6 +18,7 @@ GtkButton *start;
 GtkButton *stop;
 
 ClickThread *clickThread;
+HotKeyThread *hotKeyThread;
 
 bool isFixedDelay = true;
 
@@ -29,15 +31,19 @@ void init_log() {
     osAppender->setLayout(pLayout);
     log4cpp::Category &MouseClickLog = log4cpp::Category::getInstance("MouseClick");
     log4cpp::Category &ClickThreadLog = log4cpp::Category::getInstance("ClickThread");
+    log4cpp::Category &HotKeyLog = log4cpp::Category::getInstance("HotKeyThread");
     MouseClickLog.addAppender(osAppender);
     ClickThreadLog.addAppender(osAppender);
+    HotKeyLog.addAppender(osAppender);
     // 设置日志级别
 #ifdef NDEBUG
     MouseClickLog.setPriority(log4cpp::Priority::INFO);
     ClickThreadLog.setPriority(log4cpp::Priority::INFO);
+    HotKeyLog.setPriority(log4cpp::Priority::INFO);
 #else
     MouseClickLog.setPriority(log4cpp::Priority::DEBUG);
     ClickThreadLog.setPriority(log4cpp::Priority::DEBUG);
+    HotKeyLog.setPriority(log4cpp::Priority::DEBUG);
 #endif
 }
 
@@ -68,13 +74,14 @@ void randomInterval_onClick() {
 
 // 更改快捷键下拉框选择项后，更新注册快捷键
 void hotKey_onClick() {
-//    const gchar *hotKeyId = gtk_combo_box_get_active_id(hotKey);
-    // TODO 注册全局热键
+    const gchar *hotKeyId = gtk_combo_box_get_active_id(hotKey);
+    hotKeyThread->changeHotKey(strtol(hotKeyId, nullptr, 10));
 }
 
 // 开始点击鼠标
 void start_onClick() {
     set_control_status(FALSE);
+    isClicking = true;
 
     const gchar *clickTypeId = gtk_combo_box_get_active_id(clickType);
     gdouble intervalTimeValue = gtk_spin_button_get_value(intervalTime) * 1000;
@@ -91,24 +98,31 @@ void start_onClick() {
 void stop_onClick() {
     set_control_status(TRUE);
     clickThread->stop();
+    isClicking = false;
 }
 
 // 设置控制器状态
 void set_control_status(bool status) {
+    XLockDisplay(display);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(clickType), status);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(fixedInterval), status);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(randomInterval), status);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(intervalTime), status);
-//    gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(hotKey), status);
+    gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(hotKey), status);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(start), status);
     gtk_widget_set_sensitive(reinterpret_cast<GtkWidget *>(stop), !status);
+    XUnlockDisplay(display);
 }
 
-int main(int argc,char *argv[]) {
+int main(int argc, char *argv[]) {
     init_log();
     log4cpp::Category &log = log4cpp::Category::getInstance("MouseClick");
+    if (XInitThreads() == 0) {
+        log.error("The system display manager does not support multithreading.");
+        return 1;
+    }
     // 固定显示名称（不知道为什么gnome桌面的顶栏左侧显示的名字会乱码）
-    argv[0] = (char*)"鼠标连点器";
+    argv[0] = (char *) "鼠标连点器";
     gtk_init(&argc, &argv);
     builder = gtk_builder_new();
     gtk_builder_add_from_resource(builder, "/mouse_click/mouse_click.glade", nullptr);
@@ -123,10 +137,14 @@ int main(int argc,char *argv[]) {
     g_signal_connect(G_OBJECT(start), "clicked", G_CALLBACK(start_onClick), NULL);
     g_signal_connect(G_OBJECT(stop), "clicked", G_CALLBACK(stop_onClick), NULL);
 
+    // 注册键盘快捷键
+    hotKeyThread = new HotKeyThread();
+
     log.info("System initialized.");
     gtk_widget_show(window);
     gtk_main();
     delete clickThread;
+    delete hotKeyThread;
     log.info("exit.");
     return 0;
 }

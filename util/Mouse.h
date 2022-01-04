@@ -3,13 +3,15 @@
 
 #include <X11/Xlib.h>
 
+extern Display *display;
+
 class Mouse {
 public:
     Mouse();
     ~Mouse();
     void click(int button);
 private:
-    Display *display;
+//    Display *display;
 };
 
 #endif //MOUSE_CLICK_MOUSE_H

@@ -2,7 +2,7 @@
 #define MOUSE_CLICK_CLICKTHREAD_H
 
 #include <thread>
-#include "../util/mouse.h"
+#include "../util/Mouse.h"
 
 class ClickThread {
 public:

@@ -1,6 +1,6 @@
 #include <log4cpp/Category.hh>
 #include <X11/extensions/XTest.h>
-#include "mouse.h"
+#include "Mouse.h"
 
 Mouse::Mouse() {
     log4cpp::Category &log = log4cpp::Category::getInstance("MouseClick");

@@ -3,7 +3,7 @@ project(mouse_click)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(mouse_click resources.cpp main.cpp main.h util/mouse.cpp util/mouse.h thread/ClickThread.cpp thread/ClickThread.h)
+add_executable(mouse_click resources.cpp main.cpp main.h util/Mouse.cpp util/Mouse.h thread/ClickThread.cpp thread/ClickThread.h thread/HotKeyThread.cpp thread/HotKeyThread.h)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)

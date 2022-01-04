@@ -250,7 +250,6 @@ Author: Wings-Fantasy
           <object class="GtkComboBox" id="hotKey">
             <property name="width-request">197</property>
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can-focus">False</property>
             <property name="model">hotKeyList</property>
             <property name="active">6</property>

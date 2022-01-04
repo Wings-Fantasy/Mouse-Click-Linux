@@ -12,6 +12,7 @@ ClickThread::ClickThread() {
 
 ClickThread::~ClickThread() {
     // 在析构函数中结束鼠标点击线程
+    stop();
     this->flag = false;
     delete mouse;
 }
@@ -44,10 +45,9 @@ void ClickThread::run() const {
     log4cpp::Category &log = log4cpp::Category::getInstance("ClickThread");
     log.info("Start the click thread.");
 
-    // 第一层循环，控制线程是否运行,避免出现多个线程同时运行的情况
     while(flag) {
-        // 第二层循环，控制开始点击
-        while(running) {
+        // 控制开始点击
+        if(running) {
             log.debug("Click！");
             if (isFixedDelay) {
                 mouse->click(button);
