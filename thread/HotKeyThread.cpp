@@ -5,7 +5,7 @@ HotKeyThread::HotKeyThread() {
     X_KEY = XK_F7;
     root = DefaultRootWindow(display);
     keycode = XKeysymToKeycode(display,X_KEY);
-    XGrabKey(display, keycode, modifiers, root, False, GrabModeAsync, GrabModeAsync);
+    XGrabKey(display, keycode, AnyModifier, root, False, GrabModeAsync, GrabModeAsync);
 
     // 在构造函数中启动快捷键线程
     hotKeyThread = std::thread(&HotKeyThread::run, this);
@@ -13,10 +13,8 @@ HotKeyThread::HotKeyThread() {
 }
 
 HotKeyThread::~HotKeyThread() {
-    this->X_KEY = 0;
-    this->root = 0;
     this->flag = false;
-    XUngrabKey(display,keycode,modifiers,root);
+    XUngrabKey(display,keycode,AnyModifier,root);
 }
 
 void HotKeyThread::changeHotKey(long m_X_KEY) {
@@ -61,9 +59,9 @@ void HotKeyThread::changeHotKey(long m_X_KEY) {
             X_KEY = XK_F7;
             break;
     }
-    XUngrabKey(display,keycode,modifiers,root);
+    XUngrabKey(display,keycode,AnyModifier,root);
     keycode = XKeysymToKeycode(display,X_KEY);
-    XGrabKey(display, keycode, modifiers, root, False, GrabModeAsync, GrabModeAsync);
+    XGrabKey(display, keycode, AnyModifier, root, False, GrabModeAsync, GrabModeAsync);
 }
 
 void HotKeyThread::run() const {
@@ -74,11 +72,13 @@ void HotKeyThread::run() const {
         XSelectInput(display, root, KeyPressMask );
         if(event.type == KeyPress) {
             if(event.xkey.keycode == XKeysymToKeycode(display,X_KEY)) {
-                log.debug("HotKey pressed");
-                if (isClicking) {
-                    stop_onClick();
-                } else {
-                    start_onClick();
+                if ((event.xkey.state & (ShiftMask | ControlMask | Mod1Mask | Mod4Mask)) == 0) {
+                    log.debug("HotKey pressed");
+                    if (isClicking) {
+                        stop_onClick();
+                    } else {
+                        start_onClick();
+                    }
                 }
             }
         }

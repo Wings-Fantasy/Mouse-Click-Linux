@@ -17,7 +17,6 @@ public:
     void changeHotKey(long m_X_KEY);
 private:
     long X_KEY;
-    int modifiers = Mod2Mask; // Num Lock打开小键盘
     int keycode;
     Window root;
     bool flag = true;
